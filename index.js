@@ -71,30 +71,42 @@ function gameStart() {
   // remove start button
   start.style.display = "none";
 
-  for (let i = 0; i <= 25; i++) {
-    apple[i] = document.createElement("div");
-    fruitContainer.appendChild(apple[i]);
-    apple[i].classList.add("fruit");
-    apple[i].classList.add("apple");
-
-    strawberry[i] = document.createElement("div");
-    fruitContainer.appendChild(strawberry[i]);
-    strawberry[i].classList.add("fruit");
-    strawberry[i].classList.add("strawberry");
-
-    banana[i] = document.createElement("div");
-    fruitContainer.appendChild(banana[i]);
-    banana[i].classList.add("fruit");
-    banana[i].classList.add("banana");
-
-    cherry[i] = document.createElement("div");
-    fruitContainer.appendChild(cherry[i]);
-    cherry[i].classList.add("fruit");
-    cherry[i].classList.add("cherry");
+  //All fruits that will be used in game
+  let apple_c = 0, cherry_c = 0, strawberry_c = 0, banana_c = 0;
+  for(let i=0;i<=400;i++){
+    let ri = Math.floor(Math.random()*4);
+    switch(ri){
+      case 0:
+        apple[apple_c] = document.createElement("div");
+        fruitContainer.appendChild(apple[apple_c]);
+        apple[apple_c].classList.add("fruit");
+        apple[apple_c].classList.add("apple");
+        apple_c++; break;
+      case 1:
+        strawberry[strawberry_c] = document.createElement("div");
+        fruitContainer.appendChild(strawberry[strawberry_c]);
+        strawberry[strawberry_c].classList.add("fruit");
+        strawberry[strawberry_c].classList.add("strawberry");
+        strawberry_c++; break;
+      case 2:
+        banana[banana_c] = document.createElement("div");
+        fruitContainer.appendChild(banana[banana_c]);
+        banana[banana_c].classList.add("fruit");
+        banana[banana_c].classList.add("banana");
+        banana_c++; break;
+      case 3:
+        cherry[cherry_c] = document.createElement("div");
+        fruitContainer.appendChild(cherry[cherry_c]);
+        cherry[cherry_c].classList.add("fruit");
+        cherry[cherry_c].classList.add("cherry");
+        cherry_c++; break;
+    }
   }
 
   const fruits = document.getElementsByClassName("fruit");
 
+
+  //First interval: animates fruit fall
   let i = 0,
     j = 0,
     timeInt = 1500;
@@ -110,6 +122,7 @@ function gameStart() {
     console.log("First function " + timeInt);
   }
 
+    //Second interval: At the end of fall checks coordinates, grants score
   setTimeout(() => {
     secondInt = setInterval(secondFunction, timeInt);
   }, 2900);
@@ -145,6 +158,8 @@ function gameStart() {
       score += 1;
       document.getElementById("pointer").innerHTML = "score:" + score;
       // score sound
+      scoreAudio.pause();
+      scoreAudio.currentTime = 0
       scoreAudio.play();
       // basket shake animation
       shakeBasket();
@@ -171,6 +186,8 @@ function gameStart() {
       document.getElementById("liveCont").removeChild(liveIcon1);
       gameOver();
     }
+    loseLifeSound.pause()
+    loseLifeSound.currentTime = 0
     loseLifeSound.play();
 
     return lives;
