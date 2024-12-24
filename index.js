@@ -1,6 +1,7 @@
 const gameCont = document.createElement("div");
 document.getElementById("container").appendChild(gameCont);
 gameCont.classList.add("gameCont");
+gameCont.id = "gameCont"
 
 //Fruits
 
@@ -26,7 +27,7 @@ basket.classList.add("basket");
 
 //Start button
 const start = document.createElement("button");
-document.getElementById("container").appendChild(start);
+document.getElementById("gameCont").appendChild(start);
 start.classList.add("startButton");
 start.innerHTML = "Start";
 start.addEventListener("click", gameStart);
@@ -35,6 +36,10 @@ start.addEventListener("click", gameStart);
 let score = 0;
 let lives = 3;
 let highestScore = 0;
+const sideBar = document.createElement("div")
+sideBar.id = "sideBar"
+sideBar.classList.add("sideBar")
+document.getElementById("container").appendChild(sideBar);
 const pointer = document.createElement("div");
 const livesCont = document.createElement("div");
 livesCont.classList.add("liveCont");
@@ -47,8 +52,8 @@ liveIcon2.classList.add("liveIcon");
 liveIcon3.classList.add("liveIcon");
 pointer.classList.add("pointer");
 pointer.id = "pointer";
-document.getElementById("container").appendChild(pointer);
-document.getElementById("container").appendChild(livesCont);
+document.getElementById("sideBar").appendChild(pointer);
+document.getElementById("sideBar").appendChild(livesCont);
 document.getElementById("liveCont").appendChild(liveIcon1);
 document.getElementById("liveCont").appendChild(liveIcon2);
 document.getElementById("liveCont").appendChild(liveIcon3);
@@ -57,13 +62,54 @@ document.getElementById("pointer").innerHTML = "score:" + score;
 let firstInt = null;
 let secondInt = null;
 
+// difficulty selector
+const difficultySelector = document.createElement("div");
+difficultySelector.classList.add("difficultySelector");
+document.getElementById("sideBar").appendChild(difficultySelector);
+
+difficultySelector.innerHTML = `
+  <h3>Select Difficulty:</h3>
+  <select id="difficultyLevel">
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+    <option value="diehard">Diehard</option>
+  </select>
+`;
+
+// // default falling speed
+let timeInt = 2000;
+
+// adjust speed based on difficulty
+function adjustDifficulty() {
+  const difficulty = document.getElementById("difficultyLevel").value;
+  switch (difficulty) {
+    case "easy":
+      timeInt = 2000;
+      break;
+    case "medium":
+      timeInt = 1500;
+      break;
+    case "hard":
+      timeInt = 1000;
+      break;
+    case "diehard":
+      timeInt = 500;
+      break;
+  }
+}
+
+document.getElementById("difficultyLevel").addEventListener("change", adjustDifficulty);
+// game over flag key for stopping all logic when game is over 
+let isGameOver = false
+// background music
+const backgroundMusic = document.createElement("audio")
+backgroundMusic.src = "audio.mp3"
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
 //Start
 function gameStart() {
-  // background music
-
-  const backgroundMusic = new Audio("audio.mp3");
-  backgroundMusic.loop = true;
-  backgroundMusic.volume = 0.5;
+  // play background music
   backgroundMusic.play();
 
   // basket placement
@@ -73,9 +119,9 @@ function gameStart() {
 
   //All fruits that will be used in game
   let apple_c = 0, cherry_c = 0, strawberry_c = 0, banana_c = 0;
-  for(let i=0;i<=400;i++){
-    let ri = Math.floor(Math.random()*4);
-    switch(ri){
+  for (let i = 0; i <= 400; i++) {
+    let ri = Math.floor(Math.random() * 4);
+    switch (ri) {
       case 0:
         apple[apple_c] = document.createElement("div");
         fruitContainer.appendChild(apple[apple_c]);
@@ -109,10 +155,17 @@ function gameStart() {
   //First interval: animates fruit fall
   let i = 0,
     j = 0,
-    timeInt = 1500;
-  firstInt = setInterval(firstFunction, timeInt);
+    // timeInt = 1500;
+    firstInt = setInterval(firstFunction, timeInt);
+
+
 
   function firstFunction() {
+    // if game is over stop this function
+    if (isGameOver) {
+      return
+    }
+    // munkh delger's logic
     let ran = Math.floor(Math.random() * 940);
     fruits[i].style.left = ran + "px";
     fruits[i].style.top = "-100px";
@@ -122,12 +175,16 @@ function gameStart() {
     console.log("First function " + timeInt);
   }
 
-    //Second interval: At the end of fall checks coordinates, grants score
+  //Second interval: At the end of fall checks coordinates, grants score
   setTimeout(() => {
     secondInt = setInterval(secondFunction, timeInt);
   }, 2900);
 
   function secondFunction() {
+    // if game is over stop this function 
+    if (isGameOver) {
+      return
+    }
     console.log(arr[j]);
     score_check(arr[j]);
     j++;
@@ -136,7 +193,8 @@ function gameStart() {
 
   // Score audio
 
-  const scoreAudio = new Audio("score.mp3");
+  const scoreAudio = document.createElement("audio");
+  scoreAudio.src = "score.mp3";
   scoreAudio.volume = 0.3;
 
   // basket animation function when score
@@ -170,7 +228,8 @@ function gameStart() {
 
   // losing live sound
 
-  const loseLifeSound = new Audio("losing_live.wav");
+  const loseLifeSound = document.createElement("audio");
+  loseLifeSound.src = "Losing_live.wav";
   loseLifeSound.volume = 0.5;
 
   // lives logic
@@ -186,6 +245,7 @@ function gameStart() {
       document.getElementById("liveCont").removeChild(liveIcon1);
       gameOver();
     }
+
     loseLifeSound.pause()
     loseLifeSound.currentTime = 0
     loseLifeSound.play();
@@ -240,28 +300,52 @@ function gameStart() {
 // game over sound
 
 const gameOverSound = new Audio("game_over.mp3");
-gameOverSound.volume = 0.5;
+gameOverSound.volume = 1;
 
 // game over and restart
 
 function gameOver() {
   // remove intervals
 
-  clearInterval(firstInt);
-  clearInterval(secondInt);
+  // clearInterval(firstInt);
+  // clearInterval(secondInt);
+
+  // togloom duussaniig tumend tugee !!
+  isGameOver = true
+
+  // stop animation of all fking fruit
+  // const fruits = document.getElementsByClassName("fruit");
+  // for (let i of fruits) {
+  //   // console.log(i)
+  //   console.log(i.classList)
+  //   i.classList.remove("animate"); 
+  //   i.style.top = "-100px"
+  // }
+
+  // remove basket 
+  gameCont.removeChild(basket)
+  /////
+
+
+  // firstInt = null
+  // secondInt = null
 
   // play game over sound
   gameOverSound.play();
+
 
   // game over text
 
   const gameOverMessage = document.createElement("div");
   gameOverMessage.className = "gameOverMessage";
   gameOverMessage.innerHTML = `
-    <h1>Game Over</h1>
-    <p>Your score: ${score}</p>
+  <h1>Game Over</h1>
+  <p>Your score: ${score}</p>
   `;
   gameCont.appendChild(gameOverMessage);
+  // stop background music 
+  backgroundMusic.pause()
+
 
   // restart the game
 
