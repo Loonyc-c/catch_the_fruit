@@ -1,29 +1,9 @@
+// game container
+
 const gameCont = document.createElement("div");
 document.getElementById("container").appendChild(gameCont);
 gameCont.classList.add("gameCont");
 gameCont.id = "gameCont"
-
-//Fruits
-
-const fruitContainer = document.createElement("div");
-fruitContainer.classList.add("fruitCont");
-gameCont.appendChild(fruitContainer);
-
-let apple = [],
-  strawberry = [],
-  cherry = [],
-  banana = [],
-  arr = [];
-
-const poo = document.createElement("div");
-fruitContainer.appendChild(poo);
-poo.classList.add("pooImage");
-
-//Basket
-const basket = document.createElement("div");
-basket.innerHTML = `<img src="basket.png" alt="Basket">`;
-gameCont.appendChild(basket);
-basket.classList.add("basket");
 
 //Start button
 const start = document.createElement("button");
@@ -32,35 +12,51 @@ start.classList.add("startButton");
 start.innerHTML = "Start";
 start.addEventListener("click", gameStart);
 
-//Score & Live
-let score = 0;
-let lives = 3;
-let highestScore = 0;
+//Basket
+const basket = document.createElement("div");
+basket.innerHTML = `<img src="basket.png" alt="Basket">`;
+gameCont.appendChild(basket);
+basket.classList.add("basket");
+
+// side bar 
 const sideBar = document.createElement("div")
 sideBar.id = "sideBar"
 sideBar.classList.add("sideBar")
 document.getElementById("container").appendChild(sideBar);
-const pointer = document.createElement("div");
+
+//Score & Live
+let score = 0;
+let lives = 3;
+
+// score container
+const scoreContainer = document.createElement("div");
+scoreContainer.innerHTML = "score:" + score;
+scoreContainer.classList.add("scoreContainer");
+scoreContainer.id = "scoreContainer";
+
+// live cont
 const livesCont = document.createElement("div");
 livesCont.classList.add("liveCont");
 livesCont.id = "liveCont";
+
+// append live and score cont to side bar
+document.getElementById("sideBar").appendChild(scoreContainer);
+document.getElementById("sideBar").appendChild(livesCont);
+
+// live icon container div
 const liveIcon1 = document.createElement("div");
 const liveIcon2 = document.createElement("div");
 const liveIcon3 = document.createElement("div");
+
+// live icon
 liveIcon1.classList.add("liveIcon");
 liveIcon2.classList.add("liveIcon");
 liveIcon3.classList.add("liveIcon");
-pointer.classList.add("pointer");
-pointer.id = "pointer";
-document.getElementById("sideBar").appendChild(pointer);
-document.getElementById("sideBar").appendChild(livesCont);
+
+// live icon append to live container
 document.getElementById("liveCont").appendChild(liveIcon1);
 document.getElementById("liveCont").appendChild(liveIcon2);
 document.getElementById("liveCont").appendChild(liveIcon3);
-document.getElementById("pointer").innerHTML = "score:" + score;
-
-let firstInt = null;
-let secondInt = null;
 
 // difficulty selector
 const difficultySelector = document.createElement("div");
@@ -68,13 +64,13 @@ difficultySelector.classList.add("difficultySelector");
 document.getElementById("sideBar").appendChild(difficultySelector);
 
 difficultySelector.innerHTML = `
-  <h3>Select Difficulty:</h3>
-  <select id="difficultyLevel">
-    <option value="easy">Easy</option>
-    <option value="medium">Medium</option>
-    <option value="hard">Hard</option>
-    <option value="diehard">Diehard</option>
-  </select>
+<h3>Select Difficulty:</h3>
+<select id="difficultyLevel">
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
+<option value="diehard">DieHard</option>
+</select>
 `;
 
 // // default falling speed
@@ -98,17 +94,28 @@ function adjustDifficulty() {
       break;
   }
 }
-
 document.getElementById("difficultyLevel").addEventListener("change", adjustDifficulty);
-// game over flag key for stopping all logic when game is over 
-let isGameOver = false
+
 // background music
 const backgroundMusic = document.createElement("audio")
 backgroundMusic.src = "audio.mp3"
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.5;
+
+//Fruits
+const fruitContainer = document.createElement("div");
+fruitContainer.classList.add("fruitCont");
+gameCont.appendChild(fruitContainer);
+
+let apple = [],
+  strawberry = [],
+  cherry = [],
+  banana = [],
+  arr = [];
+
 //Start
 function gameStart() {
+
   // play background music
   backgroundMusic.play();
 
@@ -128,6 +135,7 @@ function gameStart() {
         apple[apple_c].classList.add("fruit");
         apple[apple_c].classList.add("apple");
         apple_c++; break;
+
       case 1:
         strawberry[strawberry_c] = document.createElement("div");
         fruitContainer.appendChild(strawberry[strawberry_c]);
@@ -151,20 +159,18 @@ function gameStart() {
 
   const fruits = document.getElementsByClassName("fruit");
 
-
   //First interval: animates fruit fall
   let i = 0,
     j = 0,
-    // timeInt = 1500;
     firstInt = setInterval(firstFunction, timeInt);
-
-
+  // timeInt = 1500;
 
   function firstFunction() {
     // if game is over stop this function
     if (isGameOver) {
       return
     }
+
     // munkh delger's logic
     let ran = Math.floor(Math.random() * 940);
     fruits[i].style.left = ran + "px";
@@ -177,7 +183,7 @@ function gameStart() {
 
   //Second interval: At the end of fall checks coordinates, grants score
   setTimeout(() => {
-    secondInt = setInterval(secondFunction, timeInt);
+    let secondInt = setInterval(secondFunction, timeInt);
   }, 2900);
 
   function secondFunction() {
@@ -185,12 +191,13 @@ function gameStart() {
     if (isGameOver) {
       return
     }
+
+    // munkh delger's logic
     console.log(arr[j]);
     score_check(arr[j]);
     j++;
     console.log("Second function " + timeInt);
   }
-
   // Score audio
 
   const scoreAudio = document.createElement("audio");
@@ -198,14 +205,15 @@ function gameStart() {
   scoreAudio.volume = 0.3;
 
   // basket animation function when score
-
   function shakeBasket() {
     basket.classList.add("shake");
 
+    //  basket shake animation reset after first catch gehiimuudaa hha
     setTimeout(() => {
       basket.classList.remove("shake");
     }, 500);
   }
+  // score checker 
 
   let lvl = 0;
   function score_check(ran) {
@@ -214,26 +222,27 @@ function gameStart() {
     let rightEdge = leftEdge + 150;
     if (leftEdge <= ran && rightEdge >= ran) {
       score += 1;
-      document.getElementById("pointer").innerHTML = "score:" + score;
+      document.getElementById("scoreContainer").innerHTML = "score:" + score;
+
       // score sound
       scoreAudio.pause();
       scoreAudio.currentTime = 0
       scoreAudio.play();
+
       // basket shake animation
       shakeBasket();
+
     } else {
       lives = live_u(lives);
     }
   }
 
   // losing live sound
-
   const loseLifeSound = document.createElement("audio");
   loseLifeSound.src = "Losing_live.wav";
   loseLifeSound.volume = 0.5;
 
   // lives logic
-
   function live_u(lives) {
     lives -= 1;
     console.log(lives);
@@ -246,6 +255,7 @@ function gameStart() {
       gameOver();
     }
 
+    // play lose life sound 
     loseLifeSound.pause()
     loseLifeSound.currentTime = 0
     loseLifeSound.play();
@@ -258,22 +268,14 @@ function gameStart() {
 
   let position = { left: 450 };
 
-  basket.style.left = position.left + "px";
-
   const containerWidth = gameCont.offsetWidth;
+  const basketWidth = basket.offsetWidth;
 
   function moveBasket(event) {
-    const basketWidth = basket.offsetWidth;
-    switch (event.key) {
-      case "ArrowLeft":
-        position.left = Math.max(0, position.left - modifier);
-        break;
-      case "ArrowRight":
-        position.left = Math.min(
-          containerWidth - basketWidth,
-          position.left + modifier
-        );
-        break;
+    if (event.key === "ArrowLeft") {
+      position.left = Math.max(0, position.left - modifier);
+    } else if (event.key === "ArrowRight") {
+      position.left = Math.min(containerWidth - basketWidth, position.left + modifier);
     }
     basket.style.left = position.left + "px";
   }
@@ -281,59 +283,36 @@ function gameStart() {
   document.addEventListener("keydown", moveBasket);
 
   // move Basket with Mouse
-
   function moveBasketWithMouse(event) {
-    const basketWidth = basket.offsetWidth;
 
     const mouseX = event.clientX - gameCont.offsetLeft;
     position.left = Math.min(
       Math.max(0, mouseX - basketWidth / 2),
       containerWidth - basketWidth
     );
-
     basket.style.left = position.left + "px";
   }
-
   gameCont.addEventListener("mousemove", moveBasketWithMouse);
 }
 
 // game over sound
-
 const gameOverSound = new Audio("game_over.mp3");
 gameOverSound.volume = 1;
 
 // game over and restart
 
+// game over flag, key for stopping all logic when game is over 
+let isGameOver = false
+/////////////////////
+
 function gameOver() {
-  // remove intervals
-
-  // clearInterval(firstInt);
-  // clearInterval(secondInt);
-
   // togloom duussaniig tumend tugee !!
   isGameOver = true
-
-  // stop animation of all fking fruit
-  // const fruits = document.getElementsByClassName("fruit");
-  // for (let i of fruits) {
-  //   // console.log(i)
-  //   console.log(i.classList)
-  //   i.classList.remove("animate"); 
-  //   i.style.top = "-100px"
-  // }
 
   // remove basket 
   gameCont.removeChild(basket)
   /////
-
-
-  // firstInt = null
-  // secondInt = null
-
-  // play game over sound
   gameOverSound.play();
-
-
   // game over text
 
   const gameOverMessage = document.createElement("div");
@@ -343,13 +322,13 @@ function gameOver() {
   <p>Your score: ${score}</p>
   `;
   gameCont.appendChild(gameOverMessage);
+
   // stop background music 
   backgroundMusic.pause()
 
-
   // restart the game
-
-  gameOverMessage.addEventListener("click", () => {
+  gameOverMessage.onclick = function () {
     window.location.reload();
-  });
+  }
+
 }

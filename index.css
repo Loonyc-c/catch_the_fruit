@@ -115,10 +115,8 @@
   width: 150px;
   height: 105px;
   top: 1030px;
-  /* top: 930px; */
   position: absolute;
-  object-fit: contain;
-  transition: left 0.1s linear;
+  transition: 0.1s linear;
 }
 .basket img {
   width: 100%;
@@ -126,7 +124,7 @@
 }
 
 /* Score & Live */
-.pointer {
+.scoreContainer {
   width: 300px;
   height: 150px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
