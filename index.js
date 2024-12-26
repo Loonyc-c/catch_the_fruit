@@ -124,6 +124,37 @@ function gameStart() {
   // remove start button
   start.style.display = "none";
 
+   //move Basket with Arrow
+   let modifier = 80;
+
+   let position = { left: basket.offsetLeft};
+ 
+   const containerWidth = gameCont.offsetWidth;
+   const basketWidth = basket.offsetWidth;
+ 
+   function moveBasket(event) {
+     if (event.key === "ArrowLeft") {
+       position.left = Math.max(0, position.left - modifier);
+     } else if (event.key === "ArrowRight") {
+       position.left = Math.min(containerWidth - basketWidth, position.left + modifier);
+     }
+     basket.style.left = position.left + "px";
+   }
+ 
+   document.addEventListener("keydown", moveBasket);
+ 
+   // move Basket with Mouse
+   function moveBasketWithMouse(event) {
+    
+     const mouseX = event.clientX - gameCont.offsetLeft;
+     position.left = Math.min(
+       Math.max(0, mouseX - basketWidth / 2),
+       containerWidth - basketWidth
+     );
+     basket.style.left = position.left + "px";
+   }
+   gameCont.addEventListener("mousemove", moveBasketWithMouse);
+
   //All fruits that will be used in game
   let apple_c = 0, cherry_c = 0, strawberry_c = 0, banana_c = 0;
   for (let i = 0; i <= 400; i++) {
@@ -263,36 +294,6 @@ function gameStart() {
     return lives;
   }
 
-  //move Basket with Arrow
-  let modifier = 80;
-
-  let position = { left: 450 };
-
-  const containerWidth = gameCont.offsetWidth;
-  const basketWidth = basket.offsetWidth;
-
-  function moveBasket(event) {
-    if (event.key === "ArrowLeft") {
-      position.left = Math.max(0, position.left - modifier);
-    } else if (event.key === "ArrowRight") {
-      position.left = Math.min(containerWidth - basketWidth, position.left + modifier);
-    }
-    basket.style.left = position.left + "px";
-  }
-
-  document.addEventListener("keydown", moveBasket);
-
-  // move Basket with Mouse
-  function moveBasketWithMouse(event) {
-
-    const mouseX = event.clientX - gameCont.offsetLeft;
-    position.left = Math.min(
-      Math.max(0, mouseX - basketWidth / 2),
-      containerWidth - basketWidth
-    );
-    basket.style.left = position.left + "px";
-  }
-  gameCont.addEventListener("mousemove", moveBasketWithMouse);
 }
 
 // game over sound

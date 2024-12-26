@@ -75,15 +75,12 @@
 }
 .apple {
   background-image: url("./apple.png");
-  /* box-shadow: 0 0 15px rgba(231, 76, 60, 0.7); */
 }
 .strawberry {
   background-image: url("./strawberry.png");
-  /* box-shadow: 0 0 15px rgba(231, 76, 60, 0.7); */
 }
 .banana {
   background-image: url("./banana.png");
-  /* box-shadow: 0 0 15px rgba(231, 76, 60, 0.7); */
 }
 .cherry {
   background-image: url("./cherry.png");
@@ -156,7 +153,6 @@
   width: 50px;
   height: 50px;
   background-image: url("./heart.png");
-  /* box-shadow: 0 0 10px rgba(255, 59, 48, 0.6); */
 
 }
 .difficultySelector {
@@ -182,10 +178,6 @@ h3{
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 
 }
-.pooImage {
-  background-image: url("./poo.png");
-}
-/* // basket animation when score */
 
 .gameOverMessage {
   position: absolute;
